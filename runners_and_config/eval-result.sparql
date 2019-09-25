@@ -1,0 +1,30 @@
+prefix eg: <http://www.example.org/>
+
+select ?system ?scenarioId ?transitionId ?transitionType (sum(?time) as ?tTime) (sum(?refSize) as ?resSize)
+where {
+[] a eg:scenarioTaskRunResult ;
+   eg:time ?time ;
+# eg:recall "1.0"^^<http://www.w3.org/2001/XMLSchema#double> ;
+  eg:precision ?precision ;
+# eg:size "1"^^<http://www.w3.org/2001/XMLSchema#integer> ;
+# eg:time "0.958077283"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+  eg:task ?task ;
+  eg:systemUnderTest ?system ;
+  .
+
+filter ( ?precision > 0.9 ) .
+
+?task 
+            eg:expectedResultSize ?refSize ;
+#            eg:queryId "1"^^<http://www.w3.org/2001/XMLSchema#long> ;
+#            eg:queryType "1"^^<http://www.w3.org/2001/XMLSchema#long> ;
+            eg:scenarioId ?scenarioId ;
+            eg:taskId ?taskId ;
+            eg:transitionId ?transitionId ;
+            eg:transitionType ?transitionType ;
+#            eg:warmup true ;
+.
+
+}
+group by ?system ?scenarioId ?transitionId ?transitionType
+order by ?scenarioId ?transitionId ?transitionType ?system
